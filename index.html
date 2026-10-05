@@ -1,0 +1,1047 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ADRV Scoring Sheet</title>
+<meta name="description" content="Module 2: CX360 Building Client Relationships. ADRV situational assessment for Assistant Managers and Managers.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+  :root {
+    color-scheme: light;
+    --navy: #101e38;
+    --navy-2: #1a2c4e;
+    --teal: #68d1c7;
+    --teal-d: #23897f;
+    --sky: #54b6da;
+    --mist: #c8cfdb;
+    --grad: linear-gradient(90deg, #54b6da, #68d1c7);
+    --bg: #eef1f5;
+    --paper: #ffffff;
+    --soft: #f5f7fa;
+    --tint: rgba(104, 209, 199, .10);
+    --ink: #101e38;
+    --body: #3a4660;
+    --muted: #6b7690;
+    --line: #e2e6ed;
+    --shadow: 0 1px 2px rgba(16,30,56,.05), 0 12px 32px -12px rgba(16,30,56,.14);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--body); font: 16px/1.6 "Inter", system-ui, -apple-system, "Segoe UI", sans-serif; -webkit-font-smoothing: antialiased; }
+  h1, h2, h3 { color: var(--ink); letter-spacing: -0.015em; margin: 0; }
+  h1 { font-size: clamp(26px, 4vw, 34px); line-height: 1.15; font-weight: 800; margin-bottom: 10px; }
+  h2 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+  h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+  p { margin: 0 0 14px; }
+  button { font: inherit; }
+  .muted { color: var(--muted); }
+  .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--teal-d); margin-bottom: 8px; }
+
+  /* ---------- Header ---------- */
+  header.top { background: var(--navy); color: #fff; position: sticky; top: 0; z-index: 20; }
+  .top-in { max-width: 860px; margin: 0 auto; padding: 14px 16px; display: flex; align-items: center; gap: 16px; }
+  .top-title { flex: 1; min-width: 0; }
+  .top-title .t { font-weight: 800; font-size: 18px; letter-spacing: -0.01em; }
+  .top-title .s { font-size: 11.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--teal); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .top-meta { text-align: right; font-size: 13px; color: var(--mist); white-space: nowrap; }
+  .top-meta strong { display: block; color: #fff; font-size: 14px; font-weight: 600; }
+  .track { height: 4px; background: var(--navy-2); }
+  .track i { display: block; height: 100%; width: 0; background: var(--grad); transition: width .45s ease; }
+
+  /* ---------- Paper ---------- */
+  main { max-width: 860px; margin: 0 auto; padding: 32px 16px 64px; }
+  .paper { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); overflow: hidden; }
+  .paper.enter { animation: enter .3s ease; }
+  @keyframes enter { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  .paper-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 16px 32px; border-bottom: 1px solid var(--line); background: var(--soft); }
+  .sec { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--ink); }
+  .sec span { color: var(--teal-d); }
+  .navq { display: flex; flex-wrap: wrap; gap: 6px; }
+  .navq button {
+    width: 30px; height: 30px; border-radius: 7px; border: 1px solid var(--line); background: #fff; color: var(--muted);
+    font-size: 12.5px; font-weight: 600; cursor: pointer; padding: 0;
+  }
+  .navq button.ans { background: var(--navy); border-color: var(--navy); color: #fff; }
+  .navq button.cur { border: 2px solid var(--teal); color: var(--ink); background: #fff; }
+  .navq button.ans.cur { background: var(--navy); color: #fff; box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--teal); border-color: var(--navy); }
+  .navq button:disabled { cursor: not-allowed; opacity: .55; }
+  .paper-body { padding: 36px 40px 32px; }
+  .paper-foot { display: flex; align-items: center; gap: 12px; padding: 18px 32px; border-top: 1px solid var(--line); background: var(--soft); }
+  .paper-foot .hint { flex: 1; text-align: right; font-size: 13px; color: var(--muted); }
+
+  /* ---------- Buttons ---------- */
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 0; cursor: pointer; text-decoration: none; font-weight: 600; font-size: 15px; border-radius: 10px; padding: 12px 22px; transition: background .15s, box-shadow .15s, opacity .15s; }
+  .btn.primary { background: var(--navy); color: #fff; }
+  .btn.primary:hover:not(:disabled) { background: var(--navy-2); box-shadow: 0 6px 16px -6px rgba(16,30,56,.5); }
+  .btn.ghost { background: #fff; color: var(--ink); border: 1px solid var(--line); }
+  .btn.ghost:hover:not(:disabled) { border-color: #c4cbd8; }
+  .btn:disabled { opacity: .4; cursor: not-allowed; }
+  .btn:focus-visible, .opt:focus-visible, .chip:focus-visible, .navq button:focus-visible, .fb-head:focus-visible { outline: 2px solid var(--sky); outline-offset: 2px; }
+  .link-btn { background: none; border: 0; color: var(--teal-d); cursor: pointer; padding: 0; font-size: 13px; font-weight: 600; }
+
+  /* ---------- Cover ---------- */
+  .cover-title { font-size: clamp(30px, 5vw, 42px); font-weight: 800; color: var(--ink); line-height: 1.08; letter-spacing: -0.02em; margin: 0 0 6px; }
+  .cover-sub { font-size: 18px; color: var(--muted); margin-bottom: 24px; }
+  .facts { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; margin-bottom: 26px; }
+  .facts > div { padding: 14px 16px; border-right: 1px solid var(--line); }
+  .facts > div:last-child { border-right: 0; }
+  .facts .l { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .facts .v { font-weight: 700; color: var(--ink); font-size: 15px; }
+  .instr { border-left: 3px solid var(--teal); background: var(--soft); border-radius: 0 10px 10px 0; padding: 16px 20px; margin-bottom: 26px; }
+  .instr ol { margin: 6px 0 0; padding-left: 20px; }
+  .instr li { margin-bottom: 4px; }
+  label.f { display: block; font-size: 13px; font-weight: 600; color: var(--ink); margin: 14px 0 6px; }
+  input[type=text], textarea, select { width: 100%; font: inherit; color: var(--ink); background: #fff; border: 1px solid var(--line); border-radius: 9px; padding: 11px 13px; transition: border-color .15s, box-shadow .15s; }
+  textarea { min-height: 100px; resize: vertical; line-height: 1.5; }
+  input:focus, textarea:focus, select:focus { outline: 0; border-color: var(--sky); box-shadow: 0 0 0 4px rgba(84,182,218,.16); }
+  input:disabled, textarea:disabled { background: var(--soft); color: var(--body); }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
+
+  /* ---------- Question ---------- */
+  .qnum { font-size: 13px; font-weight: 700; color: var(--teal-d); letter-spacing: .04em; margin-bottom: 8px; }
+  .q-title { font-size: clamp(20px, 2.8vw, 24px); font-weight: 700; line-height: 1.35; color: var(--ink); margin: 0 0 24px; letter-spacing: -0.01em; }
+  .opts { display: grid; gap: 10px; }
+  .opt { display: flex; gap: 14px; align-items: center; width: 100%; text-align: left; cursor: pointer; background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; color: var(--body); transition: border-color .15s, background .15s; }
+  .opt:hover:not(:disabled) { border-color: #b9c2d2; background: var(--soft); }
+  .opt .k { flex: none; width: 30px; height: 30px; border-radius: 50%; border: 1.5px solid #c4cbd8; display: grid; place-items: center; font-weight: 700; font-size: 13px; color: var(--ink); background: #fff; }
+  .opt.sel { border-color: var(--navy); background: var(--tint); }
+  .opt.sel .k { background: var(--navy); border-color: var(--navy); color: #fff; }
+  .opt.sel span:last-child { color: var(--ink); font-weight: 500; }
+  .keys { font-size: 12px; color: var(--muted); margin-top: 18px; }
+  kbd { font: 600 11px "Inter", sans-serif; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 5px; padding: 1px 5px; background: #fff; }
+
+  /* ---------- Results ---------- */
+  .verdict { background: var(--navy); color: #fff; border-radius: 12px; padding: 30px 30px 26px; position: relative; overflow: hidden; }
+  .verdict::after { content: ""; position: absolute; right: -60px; top: -90px; width: 260px; height: 260px; border-radius: 50%; background: radial-gradient(circle, rgba(104,209,199,.22), transparent 65%); }
+  .verdict .eyebrow { color: var(--teal); }
+  .verdict .name { font-size: clamp(34px, 6vw, 48px); font-weight: 800; letter-spacing: -0.025em; line-height: 1.05; }
+  .verdict .motto { font-size: 17px; color: var(--mist); font-style: italic; margin-top: 6px; }
+  .verdict p { color: var(--mist); margin: 14px 0 0; position: relative; }
+  .verdict strong { color: #fff; }
+  .block { margin-top: 28px; }
+  .bars { display: grid; gap: 16px; margin-top: 14px; }
+  .bar-row .top2 { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+  .bar-row .nm { font-weight: 600; color: var(--ink); }
+  .bar-row .nm span { font-weight: 500; color: var(--muted); font-size: 13.5px; margin-left: 6px; }
+  .bar-row .pc { font-weight: 800; font-size: 18px; color: var(--ink); }
+  .bar { height: 10px; border-radius: 99px; background: #edf0f4; overflow: hidden; }
+  .bar i { display: block; height: 100%; width: 0; border-radius: 99px; background: #cfd7e3; transition: width 1s cubic-bezier(.2,.7,.2,1); }
+  .bar-row.first i { background: var(--grad); }
+  .bar-row.second i { background: #9fb6cf; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .box { border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; }
+  .box .lbl { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; font-weight: 700; color: var(--muted); margin-bottom: 6px; }
+  .box.accent { border-left: 3px solid var(--teal); }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag { font-size: 13px; padding: 4px 11px; border-radius: 99px; background: var(--soft); border: 1px solid var(--line); color: var(--ink); }
+  .note-box { background: var(--soft); border-radius: 10px; padding: 14px 18px; font-size: 15px; }
+  .note-box strong { color: var(--ink); }
+  table { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+  th, td { text-align: left; padding: 11px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 700; }
+  tr.me td { background: var(--tint); }
+  tr.me td:first-child { box-shadow: inset 3px 0 0 var(--teal); }
+  .tbl { overflow-x: auto; }
+
+  /* ---------- Section 2 ---------- */
+  .styles4 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .style-card { border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+  .style-card .nm { font-weight: 700; color: var(--ink); }
+  .style-card .w { font-size: 14px; color: var(--muted); }
+  .persona { display: flex; gap: 14px; align-items: center; margin-bottom: 16px; }
+  .avatar { flex: none; width: 46px; height: 46px; border-radius: 50%; background: var(--navy); color: var(--teal); display: grid; place-items: center; font-weight: 700; font-size: 16px; }
+  .persona .who { font-weight: 700; font-size: 19px; color: var(--ink); line-height: 1.2; }
+  .persona .role { color: var(--muted); font-size: 14px; }
+  .scenario { background: var(--soft); border-radius: 10px; padding: 16px 18px; font-size: 16.5px; color: var(--ink); margin-bottom: 22px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { cursor: pointer; border: 1px solid var(--line); background: #fff; border-radius: 99px; padding: 8px 18px; font-weight: 600; color: var(--ink); font-size: 14.5px; transition: all .15s; }
+  .chip:hover:not(:disabled) { border-color: #b9c2d2; }
+  .chip.sel { background: var(--navy); color: #fff; border-color: var(--navy); }
+  .chip:disabled { cursor: default; }
+  .review-row { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .review-row:last-child { border-bottom: 0; }
+  .review-row .n { flex: none; width: 24px; color: var(--muted); font-weight: 700; }
+  .review-row .who { font-weight: 600; color: var(--ink); }
+  .review-row .st { font-size: 13px; color: var(--teal-d); font-weight: 700; }
+  .review-row .ln { font-size: 14.5px; margin-top: 2px; }
+
+  .scoreline { display: flex; align-items: center; gap: 20px; background: var(--navy); color: #fff; border-radius: 12px; padding: 20px 24px; }
+  .scoreline .big { font-size: 40px; font-weight: 800; line-height: 1; letter-spacing: -0.02em; }
+  .scoreline .big small { font-size: 20px; color: var(--mist); font-weight: 600; }
+  .scoreline .t { font-weight: 700; font-size: 17px; }
+  .scoreline .d { color: var(--mist); font-size: 14px; }
+  .fb { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  .fb + .fb { margin-top: 10px; }
+  .fb-head { display: flex; align-items: center; gap: 12px; padding: 14px 18px; cursor: pointer; width: 100%; background: #fff; border: 0; text-align: left; }
+  .fb-head .who { flex: 1; font-weight: 700; color: var(--ink); }
+  .fb-head .avatar { width: 34px; height: 34px; font-size: 13px; }
+  .badge { font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 99px; }
+  .badge.ok { background: var(--tint); color: var(--teal-d); }
+  .badge.no { background: #fbf0dd; color: #8a5a12; }
+  .chev { color: var(--muted); transition: transform .2s; font-size: 13px; }
+  .fb.open .chev { transform: rotate(180deg); }
+  .fb-body { display: none; padding: 4px 18px 20px; border-top: 1px solid var(--line); }
+  .fb.open .fb-body { display: block; }
+  .kv { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 14px 0; }
+  .kv > div { background: var(--soft); border-radius: 9px; padding: 10px 14px; }
+  .kv .l { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 700; }
+  .kv .v { font-weight: 700; color: var(--ink); }
+  .sub { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 700; margin: 16px 0 6px; }
+  .model { border-left: 3px solid var(--teal); background: var(--tint); border-radius: 0 9px 9px 0; padding: 12px 16px; color: var(--ink); }
+  .yours { border: 1px dashed #c4cbd8; border-radius: 9px; padding: 12px 16px; white-space: pre-wrap; }
+  ul.check { list-style: none; padding: 0; margin: 0; }
+  ul.check li { position: relative; padding-left: 26px; margin-bottom: 6px; font-size: 14.5px; }
+  ul.check li::before { content: ""; position: absolute; left: 2px; top: 6px; width: 12px; height: 12px; border-radius: 3px; border: 1.5px solid var(--teal-d); }
+  ul.cues { padding-left: 18px; margin: 0; font-size: 14.5px; }
+  ol.points { list-style: none; counter-reset: p; padding: 0; margin: 0; }
+  ol.points li { counter-increment: p; position: relative; padding: 0 0 18px 46px; }
+  ol.points li::before { content: counter(p); position: absolute; left: 0; top: 0; width: 30px; height: 30px; border-radius: 50%; background: var(--navy); color: var(--teal); display: grid; place-items: center; font-weight: 700; font-size: 14px; }
+  ol.points b { color: var(--ink); }
+  .flex4 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .flex4 .box .row { font-size: 14px; margin-bottom: 6px; }
+  .flex4 .box .row b { color: var(--ink); }
+
+  /* ---------- Submission ---------- */
+  .summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 18px 0 28px; }
+  .summary > div { border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+  .summary .l { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 700; }
+  .summary .v { font-weight: 700; color: var(--ink); }
+  .task { display: flex; gap: 16px; align-items: flex-start; }
+  .task .num { flex: none; width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid #c4cbd8; color: var(--ink); display: grid; place-items: center; font-weight: 700; font-size: 14px; }
+  .task.done .num { background: var(--navy); border-color: var(--navy); color: var(--teal); }
+  .divider { height: 1px; background: var(--line); border: 0; margin: 24px 0; }
+  .email { font-weight: 700; color: var(--ink); background: var(--tint); padding: 1px 6px; border-radius: 5px; overflow-wrap: anywhere; }
+  .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+  .note { font-size: 13px; color: var(--muted); }
+
+  .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%) translateY(20px); opacity: 0; background: var(--navy); color: #fff; padding: 10px 18px; border-radius: 10px; font-size: 14px; z-index: 50; transition: all .25s; pointer-events: none; }
+  .toast.show { opacity: 1; transform: translateX(-50%); }
+  .modal-bg { position: fixed; inset: 0; background: rgba(16,30,56,.5); z-index: 60; display: none; place-items: center; padding: 16px; }
+  .modal-bg.show { display: grid; }
+  .modal { background: #fff; border-radius: 14px; max-width: 440px; width: 100%; padding: 28px; box-shadow: 0 30px 80px -20px rgba(16,30,56,.5); animation: enter .2s ease; }
+  .modal .actions { justify-content: flex-end; }
+
+  @media (max-width: 640px) {
+    main { padding: 16px 12px 40px; }
+    .paper-head, .paper-foot { padding: 14px 18px; }
+    .paper-body { padding: 26px 20px 24px; }
+    .grid2, .two, .styles4, .flex4, .kv, .summary { grid-template-columns: 1fr; }
+    .facts { grid-template-columns: 1fr 1fr; }
+    .facts > div:nth-child(2) { border-right: 0; }
+    .facts > div:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+    .top-title .s { display: none; }
+    .paper-foot .hint { display: none; }
+    .paper-foot .btn.primary { flex: 1; }
+    .verdict { padding: 24px 20px; }
+  }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-in">
+    <div class="top-title">
+      <div class="t">ADRV Scoring Sheet</div>
+      <div class="s">Module 2: CX360 Building Client Relationships</div>
+    </div>
+    <div class="top-meta" id="topMeta"></div>
+  </div>
+  <div class="track"><i id="trackFill"></i></div>
+</header>
+
+<main>
+  <div class="paper" id="paper"></div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<div class="modal-bg" id="modal">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <h2 id="modalTitle">Submit Section 2?</h2>
+    <p class="muted">Once you submit, your answers are locked and your results and feedback are shown.</p>
+    <div class="actions">
+      <button class="btn ghost" id="modalCancel" type="button">Keep editing</button>
+      <button class="btn primary" id="modalOk" type="button">Submit section</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  const EMAIL = "learning@healthreconconnect.com";
+  const STORE_KEY = "adrv-assessment-v3";
+
+  // ================= Content =================
+  const LETTERS = ["A", "B", "C", "D"];
+  const STYLES = {
+    A: { name: "The Advisor", short: "Advisor", motto: "Facts build credibility",
+         strengths: ["Analytical", "Thorough", "Reliable", "Data-driven"],
+         watch: "Focusing on detail at the expense of the relationship",
+         client: "Analytical", wants: "Data and logic",
+         about: "You build trust through accuracy. Clients rely on you because your numbers hold up and your recommendations are backed by evidence.",
+         flex: "Lead with the headline before the evidence, and make room for one personal question before the data.",
+         stretch: "Visionary", stretchWhy: "Visionary clients want the big picture. Your instinct to go deep into the data can feel like you're drowning them in operational detail." },
+    B: { name: "The Connector", short: "Connector", motto: "Relationships build trust",
+         strengths: ["Empathetic", "Collaborative", "Trust-building", "Influential"],
+         watch: "Avoiding difficult conversations",
+         client: "Relational", wants: "People and trust",
+         about: "You build trust through people. Clients open up to you, share their challenges early and feel genuinely supported.",
+         flex: "Name the hard issue early, and pair your empathy with a clear ask and a date.",
+         stretch: "Driver", stretchWhy: "Driver clients want results, fast. Warm-up conversation and softened messages can read as rambling or hedging." },
+    C: { name: "The Achiever", short: "Achiever", motto: "Results build confidence",
+         strengths: ["Decisive", "Action-oriented", "Efficient", "Outcome-focused"],
+         watch: "Coming across as impatient",
+         client: "Driver", wants: "Results, fast",
+         about: "You build confidence through delivery. Clients know that when you commit to something, it gets done.",
+         flex: "Slow down for clients who need context or time, and check how people are affected before pushing for a decision.",
+         stretch: "Relational", stretchWhy: "Relational clients need time and want to know their team is considered. Moving straight to the action can feel transactional or rushed." },
+    D: { name: "The Strategist", short: "Strategist", motto: "Vision builds partnerships",
+         strengths: ["Innovative", "Future-focused", "Influential", "Strategic"],
+         watch: "Overlooking important details",
+         client: "Visionary", wants: "The big picture",
+         about: "You build partnerships through vision. Clients value how you connect today's work to where their organisation is heading.",
+         flex: "Anchor the vision in two or three concrete numbers, and close with specific next steps.",
+         stretch: "Analytical", stretchWhy: "Analytical clients need proof. Big-picture framing without the numbers behind it can sound vague or unsupported." }
+  };
+
+  const QUESTIONS = [
+    ["A client emails late in the day: their denials jumped this week and they want to know why.", [
+      "Pull the data and break the denials down by payer and reason before you reply.",
+      "Call them straight away to acknowledge their concern and reassure them you're on it.",
+      "Reply within minutes with the three actions you're already taking.",
+      "Think about what this means for their wider revenue goals and frame a longer-term fix."]],
+    ["You're preparing for a quarterly business review (QBR) with a key client.", [
+      "Build a detailed appendix of metrics, trends and methodology.",
+      "Leave time for the client to talk about how their team and organisation are doing.",
+      "Put the top three results and next actions on one page.",
+      "Prepare a 12-month roadmap linked to industry trends and their goals."]],
+    ["A new CFO joins your client's organisation.", [
+      "Send them a fact pack on performance history and current KPIs.",
+      "Set up an informal introduction call to get to know them.",
+      "Ask what success looks like in their first 90 days, and commit to it.",
+      "Ask where they want the revenue cycle to be in two to three years."]],
+    ["Your team missed an SLA. You're telling the client.", [
+      "Explain the root cause clearly, with evidence.",
+      "Acknowledge the impact on them first and apologise personally.",
+      "Lead with the recovery plan and the new date.",
+      "Position the fix as part of a wider improvement in how you work together."]],
+    ["The client pushes back on your recommendation.", [
+      "Share more data to show why it's the right call.",
+      "Explore their concerns and what's really behind the hesitation.",
+      "Propose a quick pilot so the results can speak for themselves.",
+      "Link the recommendation to their strategic priorities."]],
+    ["A client relationship feels strongest to you when…", [
+      "They trust your numbers without needing to check them.",
+      "They share their challenges with you openly.",
+      "You consistently hit the targets they set.",
+      "They invite you into their planning conversations."]],
+    ["You run a weekly status call. Your preferred format is…", [
+      "A structured walkthrough of the dashboard, metric by metric.",
+      "A quick personal check-in first, then the updates.",
+      "Fifteen minutes maximum: wins, risks and actions.",
+      "Trends, and what's coming next quarter."]],
+    ["A client asks for something that's outside the agreed scope.", [
+      "Work out the effort and implications precisely before answering.",
+      "Say yes where you can, to protect the relationship.",
+      "Give a quick, clear answer: what you can do, and by when.",
+      "Explore whether it points to a bigger need you could help with."]],
+    ["Colleagues would most likely describe you as…", [
+      "Thorough and precise.",
+      "Approachable and supportive.",
+      "Driven: you get things done.",
+      "A big-picture thinker with new ideas."]],
+    ["An angry client is on the phone. Your instinct is to…", [
+      "Use the facts to correct any misunderstanding.",
+      "Calm things down and restore the relationship.",
+      "Move straight to solutions and timelines.",
+      "Step back and reframe the bigger picture."]],
+    ["A client asks: “So, how are we doing?”", [
+      "Walk through the key metrics against benchmarks.",
+      "Ask how they feel it's going from their side.",
+      "Give the headline result and the one thing to fix.",
+      "Talk about progress toward their long-term goals."]],
+    ["The part of client work that energises you most is…", [
+      "Analysing data to find the insight others missed.",
+      "Building strong relationships with the client's team.",
+      "Hitting targets and closing issues.",
+      "Shaping strategy and bringing new ideas."]]
+  ];
+
+  const CLIENT_STYLES = ["Analytical", "Relational", "Driver", "Visionary"];
+  const FLEX = {
+    Analytical: { do: "Lead with data. Send written summaries. Back every claim with a number.", avoid: "Being vague, or making claims you can't support.", wants: "Data and logic", you: "A" },
+    Relational: { do: "Open with a personal moment. Frame updates around how they help their team. Give them time.", avoid: "Being transactional, or rushing them to decide.", wants: "People and trust", you: "B" },
+    Driver:     { do: "Lead with the single most important metric and the action. Be brief.", avoid: "Rambling, hedging or process detail they didn't ask for.", wants: "Results, fast", you: "C" },
+    Visionary:  { do: "Translate operational wins into strategic outcomes. Tell the story.", avoid: "Drowning them in operational detail.", wants: "The big picture", you: "D" }
+  };
+  const SELF_CHECK = {
+    Analytical: ["Does it open with a specific number or fact?", "Could you back up every claim if asked how it was calculated?"],
+    Relational: ["Does it open with a genuine personal moment?", "Does it show how the update helps their team, without rushing a decision?"],
+    Driver:     ["Is the bottom line in the first sentence?", "Is it short, with a clear action and date and no process detail?"],
+    Visionary:  ["Does it connect the result to a strategic outcome or next year?", "Does it leave the operational detail out?"]
+  };
+
+  const CLIENTS = [
+    { who: "Priya", role: "CFO", init: "P", style: "Analytical",
+      desc: "Asks for the raw data file before every call, questions how each percentage was calculated, and follows up by email asking about your methodology.",
+      cues: ["Asks for the raw data file", "Questions how each percentage was calculated", "Follows up in writing about methodology"],
+      coach: "Priya trusts what she can verify. Earn credibility by showing your working: send the data before the call, open with a precise number, and be ready to explain how you measured it. Vague reassurance will cost you trust.",
+      model: "Priya, I sent the data file and the calculation notes ahead of today. Clean claim rate moved from 91.2% to 94.6% this month, and I'm happy to walk you through exactly how we measured it." },
+    { who: "Mark", role: "Revenue Cycle Director", init: "M", style: "Relational",
+      desc: "Opens every call by asking about your weekend, often mentions his team's workload and morale, and takes a week or two to approve changes after “checking with the team”.",
+      cues: ["Opens with personal conversation", "Talks about his team's workload and morale", "Consults his team before approving changes"],
+      coach: "Mark leads with people. Open with a genuine personal moment, frame updates around how they help his team, and build in time for him to consult. Pushing for a fast decision will feel like pressure, not progress.",
+      model: "Mark, good to talk. How's the team holding up after month-end? I have an idea that should take some pressure off them, and I'd value their input before we decide anything." },
+    { who: "Sandra", role: "COO", init: "S", style: "Driver",
+      desc: "Keeps calls to ten minutes, interrupts with “What's the bottom line?” and makes decisions on the spot.",
+      cues: ["Ten-minute calls", "Asks for the bottom line", "Decides on the spot"],
+      coach: "Sandra wants the headline and the decision. Lead with the single most important result and the one action you need from her. Leave out the backstory unless she asks for it.",
+      model: "Sandra, bottom line: collections are up 8% this quarter, and I need one decision from you today on the payer escalation." },
+    { who: "Dr. Lee", role: "VP of Strategy", init: "L", style: "Visionary",
+      desc: "Talks about growth plans and value-based care, often asks “What does this mean for next year?” and loses interest when the discussion turns to claim-level detail.",
+      cues: ["Talks about growth plans and value-based care", "Asks what results mean for next year", "Disengages from claim-level detail"],
+      coach: "Dr. Lee thinks in direction and outcomes. Translate operational wins into strategic impact and tell the story of where they lead. Keep claim-level detail for the appendix.",
+      model: "Dr. Lee, this quarter's gains put you in a stronger position for value-based contracts next year. Let me show you what that could unlock." },
+    { who: "Tom", role: "Billing Manager", init: "T", style: "Driver",
+      desc: "Replies to long emails with one line, such as “Fix it. When?”, and gets visibly frustrated when updates include process detail.",
+      cues: ["One-line replies: “Fix it. When?”", "Frustrated by process detail", "Wants the fix and the date"],
+      coach: "Tom is a Driver, like Sandra, but at an operational level. Style shows up in behaviour, not job title. Be brief, lead with the fix and the date, and leave out the process detail he didn't ask for.",
+      model: "Tom, the rejection issue is fixed as of this morning. I need one thing from you by Friday: sign-off on the new claim edit." },
+    { who: "Aisha", role: "Practice Manager", init: "A", style: "Relational",
+      desc: "Before agreeing to any change, asks how it will affect her front-desk staff, and wants to hear that her team was consulted.",
+      cues: ["Asks how changes affect her staff", "Wants to hear the team was consulted", "Agrees once people are considered"],
+      coach: "Aisha is Relational: change lands when her people feel considered. Show that her team was consulted and explain how the change makes their day easier before you get to the numbers.",
+      model: "Aisha, before we designed this change we sat down with two of your front-desk team. Here's how it will make their mornings easier." }
+  ];
+
+  const DEBRIEF = [
+    ["Your strength can become your blind spot.", "Every style is valuable. Overused, the Advisor's detail, the Connector's warmth, the Achiever's pace and the Strategist's vision each create friction. The goal isn't to change who you are, but to know when to flex."],
+    ["Read the behaviour, not the job title.", "Sandra (COO) and Tom (Billing Manager) are both Drivers. Style shows up in what clients ask for, how long they like to talk and what frustrates them."],
+    ["Flex the delivery, not the substance.", "The facts, results and commitments stay the same. What changes is what you lead with, how much detail you give and how quickly you ask for a decision."],
+    ["Lead with what they want first.", "Data and logic for Analytical clients. People and trust for Relational clients. Results, fast, for Drivers. The big picture for Visionaries."],
+    ["Watch your opposite.", "Clashes are most likely with the style furthest from your own: Analytical and Visionary sit at opposite ends, as do Relational and Driver."]
+  ];
+
+
+  // ================= Pages =================
+  const STEPS = [];
+  const add = (id, group, extra) => STEPS.push(Object.assign({ id, group }, extra || {}));
+  add("welcome", "start");
+  QUESTIONS.forEach((_, i) => add("q" + i, "p1", { q: i }));
+  add("p1-result", "p1");
+  add("p2-intro", "p2");
+  CLIENTS.forEach((_, i) => add("c" + i, "p2", { c: i }));
+  add("p2-submit", "p2");
+  add("p2-reveal", "p2");
+  add("p2-debrief", "p2");
+  add("p3", "p3");
+  add("finish", "fin");
+  const idx = id => STEPS.findIndex(s => s.id === id);
+  const SECTION = {
+    start: ["Instructions", ""],
+    p1: ["Section 1 of 3", "My style"],
+    p2: ["Section 2 of 3", "Read the client"],
+    p3: ["Section 3 of 3", "My flex plan"],
+    fin: ["Submission", ""]
+  };
+
+  // ================= State =================
+  const fresh = () => ({
+    name: "", team: "", role: "", date: "",
+    q: QUESTIONS.map(() => ""),
+    c: CLIENTS.map(() => ({ style: "", line: "" })),
+    submitted: false,
+    p3: { dominant: "", client: "", clash: "", do1: "", do2: "", do3: "", working: "" },
+    autoDom: "", step: 0, visited: {}, downloaded: false
+  });
+  let S = fresh();
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORE_KEY) || "null");
+    if (saved) S = Object.assign(fresh(), saved, { p3: Object.assign(fresh().p3, saved.p3 || {}) });
+  } catch (e) {}
+  const save = () => { try { localStorage.setItem(STORE_KEY, JSON.stringify(S)); } catch (e) {} };
+
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+  // ================= Scoring =================
+  function score() {
+    const counts = { A: 0, B: 0, C: 0, D: 0 };
+    S.q.forEach(a => { if (a) counts[a]++; });
+    const answered = S.q.filter(Boolean).length;
+    const ranked = LETTERS.slice().sort((x, y) => counts[y] - counts[x]);
+    const complete = answered === QUESTIONS.length;
+    const dom = ranked[0], second = ranked[1];
+    const blended = complete && counts[dom] - counts[second] <= 1;
+    // Percentages that always add up to 100 (largest remainder)
+    const total = answered || 1;
+    const raw = LETTERS.map(L => counts[L] / total * 100);
+    const pct = raw.map(Math.floor);
+    let rem = 100 - pct.reduce((a, b) => a + b, 0);
+    raw.map((v, i) => [v - Math.floor(v), i]).sort((a, b) => b[0] - a[0]).forEach(([, i]) => { if (rem > 0 && answered) { pct[i]++; rem--; } });
+    const pcts = {}; LETTERS.forEach((L, i) => pcts[L] = answered ? pct[i] : 0);
+    return { counts, pcts, answered, complete, dom, second, blended };
+  }
+  const domLabel = r => !r.complete ? "" : r.blended
+    ? `Blended: ${STYLES[r.dom].name} / ${STYLES[r.second].name}` : STYLES[r.dom].name;
+  const p2Score = () => S.c.filter((c, i) => c.style === CLIENTS[i].style).length;
+  const p3Done = () => ["dominant", "client", "clash", "do1", "do2", "do3", "working"].every(k => S.p3[k].trim());
+
+  // ================= Gating =================
+  function complete(st) {
+    if (st.id === "welcome") return !!S.name.trim();
+    if (st.q != null) return !!S.q[st.q];
+    if (st.c != null) return !!(S.c[st.c].style && S.c[st.c].line.trim());
+    if (st.id === "p2-submit") return S.submitted;
+    return !!S.visited[st.id];
+  }
+  const canEnter = i => STEPS.slice(0, i).every(complete);
+
+  // ================= Views =================
+  const V = {};
+
+  V.welcome = () => `
+    <div class="eyebrow">Your client relationship style · Situational assessment</div>
+    <div class="cover-title">ADRV Scoring Sheet</div>
+    <div class="cover-sub">Assistant Managers and Managers</div>
+    <div class="facts">
+      <div><div class="l">Sections</div><div class="v">3</div></div>
+      <div><div class="l">Questions</div><div class="v">12 + 6 scenarios</div></div>
+      <div><div class="l">Time</div><div class="v">About 20 min</div></div>
+      <div><div class="l">Results</div><div class="v">Shown as you go</div></div>
+    </div>
+    <div class="instr">
+      <h3>Instructions</h3>
+      <ol>
+        <li><strong>Section 1, My style:</strong> for each situation, choose the response that's closest to what you would naturally do. Not what you think is right, and not what you'd like to do: what you'd actually do. There are no right or wrong answers.</li>
+        <li><strong>Section 2, Read the client:</strong> identify each client's communication style and write the opening line you'd use with them. Feedback is shown after you submit.</li>
+        <li><strong>Section 3, My flex plan:</strong> plan your next conversation with a challenging client.</li>
+        <li>When you finish, download your PDF and email it to <span class="email">${EMAIL}</span>.</li>
+      </ol>
+    </div>
+    <h3>Participant details</h3>
+    <div class="grid2">
+      <div><label class="f" for="f-name">Full name *</label><input type="text" id="f-name" data-bind="name" autocomplete="name" value="${esc(S.name)}"></div>
+      <div><label class="f" for="f-team">Team / site</label><input type="text" id="f-team" data-bind="team" value="${esc(S.team)}"></div>
+      <div><label class="f" for="f-role">Role</label>
+        <select id="f-role" data-bind="role">
+          ${["", "Assistant Manager", "Manager", "Other"].map(o => `<option value="${o}" ${S.role === o ? "selected" : ""}>${o || "Select…"}</option>`).join("")}
+        </select></div>
+      <div><label class="f" for="f-date">Session date</label><input type="text" id="f-date" data-bind="date" placeholder="e.g. 14 October 2026" value="${esc(S.date)}"></div>
+    </div>`;
+
+  function vQuestion(i) {
+    const [text, opts] = QUESTIONS[i];
+    return `
+      <div class="qnum">Question ${i + 1}</div>
+      <p class="q-title">${esc(text)}</p>
+      <div class="opts" role="radiogroup" aria-label="Question ${i + 1}">
+        ${opts.map((o, j) => {
+          const L = LETTERS[j], sel = S.q[i] === L;
+          return `<button type="button" class="opt ${sel ? "sel" : ""}" role="radio" aria-checked="${sel}" data-q="${i}" data-v="${L}">
+            <span class="k">${L}</span><span>${esc(o)}</span></button>`;
+        }).join("")}
+      </div>
+      <p class="keys">Press <kbd>A</kbd>–<kbd>D</kbd> to answer · <kbd>Enter</kbd> for the next question</p>`;
+  }
+
+  V["p1-result"] = () => {
+    const r = score(), d = STYLES[r.dom], s2 = STYLES[r.second];
+    const mine = r.blended ? [r.dom, r.second] : [r.dom];
+    return `
+      <div class="verdict">
+        <div class="eyebrow">Section 1 result · Your dominant style</div>
+        <div class="name">${d.name}</div>
+        <div class="motto">“${d.motto}”</div>
+        <p>${r.blended
+          ? `Your top two scores are within one point, so you have a <strong>blended ${d.short}–${s2.short}</strong> style.`
+          : `Your second style is <strong>${s2.name}</strong>.`} ${d.about}</p>
+      </div>
+      <div class="block">
+        <h2>Your score breakdown</h2>
+        <div class="bars">
+          ${LETTERS.map(L => `
+            <div class="bar-row ${L === r.dom ? "first" : L === r.second && r.blended ? "second" : ""}">
+              <div class="top2"><span class="nm">${L} · ${STYLES[L].name}<span>${r.counts[L]} of 12</span></span><span class="pc">${r.pcts[L]}%</span></div>
+              <div class="bar"><i data-w="${r.pcts[L]}"></i></div>
+            </div>`).join("")}
+        </div>
+      </div>
+      <div class="two block">
+        <div class="box"><div class="lbl">Strengths</div><div class="tags">${d.strengths.map(t => `<span class="tag">${t}</span>`).join("")}</div></div>
+        <div class="box accent"><div class="lbl">Watch out for</div><div style="color:var(--ink);font-weight:500">${d.watch}</div></div>
+        <div class="box"><div class="lbl">When to flex</div><div>${d.flex}</div></div>
+        <div class="box accent"><div class="lbl">Your stretch client: ${d.stretch}</div><div>${d.stretchWhy}</div></div>
+      </div>
+      <div class="note-box block"><strong>Remember:</strong> your greatest strength can become your blind spot when overused. The goal isn't to change who you are, but to know when to flex.</div>
+      <div class="block">
+        <h2>The four styles</h2>
+        <div class="tbl"><table>
+          <thead><tr><th>Style</th><th>Strengths</th><th>Watch out for</th></tr></thead>
+          <tbody>${LETTERS.map(L => `<tr class="${mine.includes(L) ? "me" : ""}"><td><strong style="color:var(--ink)">${L} · ${STYLES[L].name}</strong><br><span class="muted" style="font-size:13px">${STYLES[L].motto}</span></td><td>${STYLES[L].strengths.join(", ")}</td><td>${STYLES[L].watch}</td></tr>`).join("")}</tbody>
+        </table></div>
+      </div>`;
+  };
+
+  V["p2-intro"] = () => `
+    <div class="eyebrow">Section 2 · Instructions</div>
+    <h1>Read the client</h1>
+    <p>Clients have the same four tendencies as you. On the client side, the styles are named by how clients communicate:</p>
+    <div class="tbl" style="margin-bottom:22px"><table>
+      <thead><tr><th>Your style</th><th>Client style</th><th>What they want first</th></tr></thead>
+      <tbody>${CLIENT_STYLES.map(cs => `<tr class="${FLEX[cs].you === score().dom ? "me" : ""}"><td>${FLEX[cs].you} · ${STYLES[FLEX[cs].you].name}</td><td><strong style="color:var(--ink)">${cs}</strong></td><td>${FLEX[cs].wants}</td></tr>`).join("")}</tbody>
+    </table></div>
+    <div class="instr" style="margin-bottom:0">
+      <h3>For each of the 6 clients</h3>
+      <ol>
+        <li>Decide which communication style they lead with.</li>
+        <li>Write the opening line you'd use on your next call, in their style.</li>
+        <li>Review and submit. Your results and feedback are shown after you submit.</li>
+      </ol>
+    </div>`;
+
+  function vClient(i) {
+    const c = CLIENTS[i], a = S.c[i], lock = S.submitted;
+    return `
+      <div class="qnum">Scenario ${i + 1}</div>
+      <div class="persona"><div class="avatar">${c.init}</div><div><div class="who">${esc(c.who)}</div><div class="role">${esc(c.role)}</div></div></div>
+      <div class="scenario">${esc(c.desc)}</div>
+      <label class="f" style="margin-top:0">a) Their style</label>
+      <div class="chips" role="radiogroup" aria-label="${esc(c.who)}'s style">
+        ${CLIENT_STYLES.map(s => `<button type="button" class="chip ${a.style === s ? "sel" : ""}" role="radio" aria-checked="${a.style === s}" data-c="${i}" data-s="${s}" ${lock ? "disabled" : ""}>${s}</button>`).join("")}
+      </div>
+      <label class="f" for="line${i}" style="margin-top:22px">b) My opening line</label>
+      <textarea id="line${i}" data-bind="c.${i}.line" placeholder="Write it as you'd actually say it…" ${lock ? "disabled" : ""}>${esc(a.line)}</textarea>
+      ${lock ? `<p class="note" style="margin-top:10px">This section has been submitted and is locked.</p>` : ""}`;
+  }
+
+  V["p2-submit"] = () => `
+    <div class="eyebrow">Section 2 · Review</div>
+    <h1>Review your answers</h1>
+    <p class="muted">${S.submitted ? "This section has been submitted." : "Check your answers before you submit. You can't change them afterwards."}</p>
+    <div>
+      ${CLIENTS.map((c, i) => `
+        <div class="review-row"><div class="n">${i + 1}</div><div style="flex:1;min-width:0">
+          <div class="who">${esc(c.who)}, ${esc(c.role)} <span class="st">· ${esc(S.c[i].style)}</span></div>
+          <div class="ln">${esc(S.c[i].line)}</div>
+          ${S.submitted ? "" : `<button class="link-btn" type="button" data-goto="c${i}">Change answer</button>`}
+        </div></div>`).join("")}
+    </div>`;
+
+  V["p2-reveal"] = () => {
+    const sc = p2Score();
+    return `
+      <div class="scoreline">
+        <div class="big">${sc}<small>/6</small></div>
+        <div><div class="t">${sc === 6 ? "You read every client correctly." : sc >= 4 ? "A strong read of your clients." : "Some clients were harder to read."}</div>
+        <div class="d">Section 2 result. Open each client to see the cues, coaching and an example opening line.</div></div>
+      </div>
+      <div class="block">
+        ${CLIENTS.map((c, i) => {
+          const a = S.c[i], ok = a.style === c.style;
+          return `
+          <div class="fb ${i === 0 ? "open" : ""}">
+            <button class="fb-head" type="button" data-toggle aria-expanded="${i === 0}">
+              <div class="avatar">${c.init}</div>
+              <div class="who">${i + 1}. ${esc(c.who)}, ${esc(c.role)}</div>
+              <span class="badge ${ok ? "ok" : "no"}">${ok ? "Correct" : "Incorrect"}</span>
+              <span class="chev">▼</span>
+            </button>
+            <div class="fb-body">
+              <div class="kv"><div><div class="l">Your answer</div><div class="v">${esc(a.style)}</div></div><div><div class="l">Correct answer</div><div class="v">${c.style}</div></div></div>
+              <div class="sub">Cues to notice</div>
+              <ul class="cues">${c.cues.map(x => `<li>${esc(x)}</li>`).join("")}</ul>
+              <div class="sub">Coaching</div>
+              <p style="margin:0">${esc(c.coach)}</p>
+              <div class="sub">Your opening line</div>
+              <div class="yours">${esc(a.line)}</div>
+              <div class="sub">Example opening line</div>
+              <div class="model">“${esc(c.model)}”</div>
+              <div class="sub">Check your line</div>
+              <ul class="check">${SELF_CHECK[c.style].map(x => `<li>${x}</li>`).join("")}</ul>
+            </div>
+          </div>`;
+        }).join("")}
+      </div>`;
+  };
+
+  V["p2-debrief"] = () => {
+    const d = STYLES[score().dom];
+    return `
+      <div class="eyebrow">Section 2 · Debrief</div>
+      <h1>Key points to take into the session</h1>
+      <ol class="points" style="margin-top:20px">${DEBRIEF.map(([t, b]) => `<li><b>${t}</b><br>${b}</li>`).join("")}</ol>
+      <div class="note-box"><strong>For you as ${d.name}:</strong> your stretch client is <strong>${d.stretch}</strong>. ${FLEX[d.stretch].do} Avoid ${FLEX[d.stretch].avoid.charAt(0).toLowerCase() + FLEX[d.stretch].avoid.slice(1)}</div>
+      <div class="block">
+        <h2>Flex guide: communicating in the client's style</h2>
+        <div class="flex4" style="margin-top:12px">
+          ${CLIENT_STYLES.map(cs => `<div class="box"><h3>${cs}</h3><div class="row"><b>Do:</b> ${FLEX[cs].do}</div><div class="row" style="margin:0"><b>Avoid:</b> ${FLEX[cs].avoid}</div></div>`).join("")}
+        </div>
+      </div>`;
+  };
+
+  V.p3 = () => `
+    <div class="eyebrow">Section 3 · Instructions</div>
+    <h1>My flex plan</h1>
+    <p class="muted">Think of one real client relationship that feels challenging. You'll bring this plan to the session.</p>
+    <label class="f" for="p3d">1. My dominant style is</label>
+    <input type="text" id="p3d" data-bind="p3.dominant" value="${esc(S.p3.dominant)}">
+    <label class="f">2. My most challenging client relationship (no names needed). Their style is</label>
+    <div class="chips">${CLIENT_STYLES.map(s => `<button type="button" class="chip ${S.p3.client === s ? "sel" : ""}" data-p3client="${s}">${s}</button>`).join("")}</div>
+    ${S.p3.client ? `<p class="note" style="margin:8px 0 0">Flex tip: ${FLEX[S.p3.client].do}</p>` : ""}
+    <label class="f" for="p3c">3. Where our styles clash, I tend to</label>
+    <textarea id="p3c" data-bind="p3.clash">${esc(S.p3.clash)}</textarea>
+    <label class="f">4. Three things I'll do differently in my next conversation with them</label>
+    <input type="text" data-bind="p3.do1" placeholder="a)" value="${esc(S.p3.do1)}" style="margin-bottom:8px" aria-label="First thing">
+    <input type="text" data-bind="p3.do2" placeholder="b)" value="${esc(S.p3.do2)}" style="margin-bottom:8px" aria-label="Second thing">
+    <input type="text" data-bind="p3.do3" placeholder="c)" value="${esc(S.p3.do3)}" aria-label="Third thing">
+    <label class="f" for="p3w">5. How I'll know it's working</label>
+    <textarea id="p3w" data-bind="p3.working">${esc(S.p3.working)}</textarea>`;
+
+  V.finish = () => {
+    const r = score();
+    return `
+      <div class="eyebrow">Submission</div>
+      <h1>Assessment complete</h1>
+      <p class="muted">Thank you, ${esc(S.name.trim())}. Complete both steps below to submit your assessment.</p>
+      <div class="summary">
+        <div><div class="l">Dominant style</div><div class="v">${STYLES[r.dom].name}${r.blended ? " (blended)" : ""}</div></div>
+        <div><div class="l">Section 2 score</div><div class="v">${p2Score()} of 6 correct</div></div>
+        <div><div class="l">Flex plan</div><div class="v">${p3Done() ? "Complete" : "Incomplete"}</div></div>
+      </div>
+      <div class="task ${S.downloaded ? "done" : ""}"><div class="num">${S.downloaded ? "✓" : "1"}</div><div style="flex:1">
+        <h3>Download your PDF</h3>
+        <p class="muted" style="font-size:14.5px;margin-bottom:0">Includes your answers, your style percentages and classification, your client classifications with feedback, and your flex plan.</p>
+        <div class="actions"><button class="btn primary" id="dlBtn" type="button">Download my PDF</button></div>
+        ${p3Done() ? "" : `<p class="note" style="margin-top:10px">Section 3 isn't complete. You can still download, or go back and finish it first.</p>`}
+      </div></div>
+      <hr class="divider">
+      <div class="task"><div class="num">2</div><div style="flex:1">
+        <h3>Email your PDF</h3>
+        <p style="font-size:15px">Every team member must send their own PDF copy to <span class="email">${EMAIL}</span>. Attach the file and use the subject line <strong style="color:var(--ink)">ADRV Scoring Sheet – ${esc(S.name.trim() || "Your Name")}</strong>.</p>
+        <div class="actions">
+          <a class="btn ghost" href="${mailto()}">Open email</a>
+          <button class="btn ghost" id="copyBtn" type="button">Copy email address</button>
+        </div>
+        <p class="note" style="margin-top:10px">The email button opens a pre-addressed message but can't attach files. Attach your downloaded PDF before you send.</p>
+      </div></div>
+      <hr class="divider">
+      <p class="note" style="margin:0">Your answers are saved in this browser only. <button class="link-btn" id="resetBtn" type="button">Start a new attempt</button></p>`;
+  };
+
+  function mailto() {
+    const nm = S.name.trim() || "[Your Name]";
+    const body = `Hi Learning team,\n\nPlease find my completed ADRV Scoring Sheet attached as a PDF.\n\n${nm}${S.team ? "\n" + S.team : ""}`;
+    return `mailto:${EMAIL}?subject=${encodeURIComponent("ADRV Scoring Sheet – " + nm)}&body=${encodeURIComponent(body)}`;
+  }
+
+  // ================= Render =================
+  function qNav(st) {
+    let ids, label;
+    if (st.q != null) { ids = QUESTIONS.map((_, i) => "q" + i); label = i => i + 1; }
+    else if (st.c != null) { ids = CLIENTS.map((_, i) => "c" + i); label = i => i + 1; }
+    else return "";
+    return `<div class="navq" aria-label="Question navigator">${ids.map((id, i) => {
+      const s = STEPS[idx(id)];
+      return `<button type="button" class="${complete(s) ? "ans" : ""} ${id === st.id ? "cur" : ""}" data-goto="${id}" ${canEnter(idx(id)) ? "" : "disabled"} aria-label="Go to ${s.q != null ? "question" : "scenario"} ${i + 1}">${label(i)}</button>`;
+    }).join("")}</div>`;
+  }
+
+  function render(animate) {
+    const st = STEPS[S.step];
+    S.visited[st.id] = true;
+    if (st.id === "p3") {
+      const lbl = domLabel(score());
+      if (!S.p3.dominant || S.p3.dominant === S.autoDom) { S.p3.dominant = lbl; S.autoDom = lbl; }
+    }
+    const [secA, secB] = SECTION[st.group];
+    const paper = $("paper");
+    paper.innerHTML = `
+      <div class="paper-head"><div class="sec">${secA}${secB ? ` · <span>${secB}</span>` : ""}</div>${qNav(st)}</div>
+      <div class="paper-body">${st.q != null ? vQuestion(st.q) : st.c != null ? vClient(st.c) : V[st.id]()}</div>
+      <div class="paper-foot">
+        <button class="btn ghost" id="backBtn" type="button" ${S.step === 0 ? "disabled" : ""}>← Previous</button>
+        <span class="hint" id="hint"></span>
+        <button class="btn primary" id="nextBtn" type="button" ${st.id === "finish" ? 'style="display:none"' : ""}></button>
+      </div>`;
+    if (animate) { paper.classList.remove("enter"); void paper.offsetWidth; paper.classList.add("enter"); }
+    paper.querySelectorAll(".bar i[data-w]").forEach(el => requestAnimationFrame(() => requestAnimationFrame(() => el.style.width = el.dataset.w + "%")));
+    updateChrome();
+    save();
+  }
+
+  function updateChrome() {
+    const st = STEPS[S.step], ok = complete(st);
+    const next = $("nextBtn");
+    next.textContent = nextLabel(st);
+    next.disabled = st.id === "p2-submit" ? false : !ok;
+    $("hint").textContent = ok || st.id === "p2-submit" ? "" : hintFor(st);
+    // Header meta
+    let meta;
+    if (st.q != null) meta = `<strong>Question ${st.q + 1} of ${QUESTIONS.length}</strong>Section 1 of 3`;
+    else if (st.c != null) meta = `<strong>Scenario ${st.c + 1} of ${CLIENTS.length}</strong>Section 2 of 3`;
+    else meta = `<strong>${SECTION[st.group][0]}</strong>${SECTION[st.group][1] || "&nbsp;"}`;
+    $("topMeta").innerHTML = meta;
+    $("trackFill").style.width = Math.round(S.step / (STEPS.length - 1) * 100) + "%";
+    // Refresh navigator answered state
+    document.querySelectorAll(".navq button").forEach(b => {
+      const i = idx(b.dataset.goto);
+      b.classList.toggle("ans", complete(STEPS[i]));
+      b.disabled = !canEnter(i);
+    });
+  }
+
+  function nextLabel(st) {
+    if (st.id === "welcome") return "Begin assessment →";
+    if (st.q === QUESTIONS.length - 1) return "Submit Section 1 →";
+    if (st.q != null) return "Next question →";
+    if (st.id === "p1-result") return "Start Section 2 →";
+    if (st.id === "p2-intro") return "Begin →";
+    if (st.c === CLIENTS.length - 1) return S.submitted ? "Next →" : "Review answers →";
+    if (st.c != null) return "Next scenario →";
+    if (st.id === "p2-submit") return S.submitted ? "View results →" : "Submit Section 2";
+    if (st.id === "p2-reveal") return "Continue →";
+    if (st.id === "p2-debrief") return "Start Section 3 →";
+    if (st.id === "p3") return "Finish assessment →";
+    return "Next →";
+  }
+  function hintFor(st) {
+    if (st.id === "welcome") return "Enter your name to begin";
+    if (st.q != null) return "Select an answer to continue";
+    if (st.c != null) return !S.c[st.c].style ? "Select a style and write your opening line" : "Write your opening line to continue";
+    return "";
+  }
+
+  function go(i) {
+    if (i < 0 || i >= STEPS.length || !canEnter(i)) return;
+    S.step = i;
+    render(true);
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }
+  function next() {
+    const st = STEPS[S.step];
+    if (st.id === "p2-submit" && !S.submitted) { $("modal").classList.add("show"); $("modalOk").focus(); return; }
+    if (st.id === "finish") return;
+    if (!complete(st)) { toast(hintFor(st)); return; }
+    go(S.step + 1);
+  }
+
+  let toastT;
+  function toast(msg) { const t = $("toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove("show"), 2200); }
+
+  // ================= Events =================
+  $("modalCancel").addEventListener("click", () => $("modal").classList.remove("show"));
+  $("modalOk").addEventListener("click", () => { S.submitted = true; $("modal").classList.remove("show"); go(idx("p2-reveal")); });
+
+  document.addEventListener("click", e => {
+    const t = e.target;
+    if (t.closest("#nextBtn")) return next();
+    if (t.closest("#backBtn")) return go(S.step - 1);
+    const g = t.closest("[data-goto]"); if (g) return go(idx(g.dataset.goto));
+    const o = t.closest(".opt[data-q]");
+    if (o) { S.q[+o.dataset.q] = o.dataset.v; render(false); return; }
+    const ch = t.closest(".chip[data-c]");
+    if (ch && !S.submitted) {
+      S.c[+ch.dataset.c].style = ch.dataset.s;
+      ch.parentElement.querySelectorAll(".chip").forEach(c => { const on = c === ch; c.classList.toggle("sel", on); c.setAttribute("aria-checked", on); });
+      updateChrome(); save(); return;
+    }
+    const pc = t.closest(".chip[data-p3client]");
+    if (pc) { S.p3.client = pc.dataset.p3client; render(false); return; }
+    const tg = t.closest("[data-toggle]");
+    if (tg) { const fb = tg.closest(".fb"); fb.classList.toggle("open"); tg.setAttribute("aria-expanded", fb.classList.contains("open")); return; }
+    if (t.id === "dlBtn") return downloadPdf();
+    if (t.id === "copyBtn") {
+      (navigator.clipboard ? navigator.clipboard.writeText(EMAIL) : Promise.reject()).then(() => toast("Email address copied"), () => toast(EMAIL));
+      return;
+    }
+    if (t.id === "resetBtn" && confirm("Start a new attempt? This clears all your answers in this browser.")) {
+      try { localStorage.removeItem(STORE_KEY); } catch (err) {}
+      S = fresh(); render(true);
+    }
+  });
+
+  document.addEventListener("input", e => {
+    const b = e.target.dataset && e.target.dataset.bind; if (!b) return;
+    const path = b.split(".");
+    let o = S; for (let k = 0; k < path.length - 1; k++) o = o[path[k]];
+    o[path[path.length - 1]] = e.target.value;
+    updateChrome(); save();
+  });
+  document.addEventListener("change", e => { if (e.target.dataset && e.target.dataset.bind) { updateChrome(); save(); } });
+
+  document.addEventListener("keydown", e => {
+    if ($("modal").classList.contains("show")) { if (e.key === "Escape") $("modal").classList.remove("show"); return; }
+    const tag = (e.target.tagName || "").toLowerCase();
+    const typing = tag === "input" || tag === "textarea" || tag === "select";
+    const st = STEPS[S.step];
+    if (!typing && st.q != null && !e.metaKey && !e.ctrlKey && !e.altKey) {
+      const k = e.key.toUpperCase();
+      const L = LETTERS.includes(k) ? k : ["1", "2", "3", "4"].includes(k) ? LETTERS[+k - 1] : null;
+      if (L) { S.q[st.q] = L; render(false); return; }
+    }
+    if (e.key === "Enter" && tag !== "textarea" && tag !== "button" && tag !== "a") { e.preventDefault(); next(); }
+  });
+
+  // ================= PDF =================
+  const WINANSI_EXTRA = "€‚ƒ„…†‡ˆ‰Š‹ŒŽ‘’“”•–—˜™š›œžŸ";
+  const pdfSafe = t => Array.from(String(t || "").replace(/\r/g, "")).map(ch => {
+    const c = ch.codePointAt(0);
+    return ch === "\n" || (c >= 32 && c <= 126) || (c >= 160 && c <= 255) || WINANSI_EXTRA.includes(ch) ? ch : "?";
+  }).join("");
+
+  function buildPdf() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: "pt", format: "a4" });
+    const W = doc.internal.pageSize.getWidth(), H = doc.internal.pageSize.getHeight();
+    const M = 48, CW = W - M * 2;
+    const NAVY = [16, 30, 56], TEAL = [104, 209, 199], TEAL_D = [35, 137, 127], SKY = [84, 182, 218], MIST = [200, 207, 219];
+    const TXT = NAVY, BODY = [58, 70, 96], MUTED = [107, 118, 144], LINE = [226, 230, 237], SOFT = [245, 247, 250];
+    const r = score();
+    let y = M;
+
+    const ensure = h => { if (y + h > H - 56) { doc.addPage(); y = M; } };
+    const text = (t, o = {}) => {
+      const { size = 10.5, bold = false, italic = false, color = BODY, indent = 0, gap = 4, lh = 1.4 } = o;
+      doc.setFont("helvetica", bold ? (italic ? "bolditalic" : "bold") : (italic ? "italic" : "normal"));
+      doc.setFontSize(size); doc.setTextColor(...color);
+      doc.splitTextToSize(pdfSafe(t), CW - indent).forEach(line => { ensure(size * lh); doc.text(line, M + indent, y + size); y += size * lh; });
+      y += gap;
+    };
+    const section = (title, eyebrow) => {
+      ensure(70); y += 14;
+      if (eyebrow) text(eyebrow.toUpperCase(), { size: 8, bold: true, color: TEAL_D, gap: 1 });
+      text(title, { size: 16, bold: true, color: TXT, gap: 6 });
+      doc.setDrawColor(...LINE); doc.setLineWidth(0.8); doc.line(M, y, W - M, y); y += 12;
+    };
+    const kv = (k, v, indent = 0) => {
+      doc.setFont("helvetica", "bold"); doc.setFontSize(10.5);
+      const kw = doc.getTextWidth(pdfSafe(k)) + 6;
+      ensure(15); doc.setTextColor(...MUTED); doc.text(pdfSafe(k), M + indent, y + 10.5);
+      doc.setFont("helvetica", "normal"); doc.setTextColor(...TXT);
+      doc.splitTextToSize(pdfSafe(v || "-"), CW - kw - indent).forEach((ln, i) => { if (i) ensure(14.5); doc.text(ln, M + indent + kw, y + 10.5); y += 14.5; });
+      y += 2;
+    };
+    const answer = v => v && v.trim() ? text(v.trim(), { indent: 12, gap: 8, color: TXT }) : text("(not answered)", { indent: 12, italic: true, color: MUTED, gap: 8 });
+
+    // Header band, matching the printed scoring sheet
+    doc.setFillColor(...NAVY); doc.rect(0, 0, W, 136, "F");
+    doc.setFillColor(...SKY); doc.rect(0, 136, W * 0.5, 3, "F");
+    doc.setFillColor(...TEAL); doc.rect(W * 0.5, 136, W * 0.5, 3, "F");
+    doc.setTextColor(255, 255, 255); doc.setFont("helvetica", "bold"); doc.setFontSize(26);
+    doc.text("ADRV Scoring Sheet", M, 60);
+    doc.setFont("helvetica", "normal"); doc.setFontSize(13); doc.setTextColor(...MIST);
+    doc.text("Your client relationship style  ·  Situational assessment", M, 84);
+    doc.setFont("helvetica", "bold"); doc.setFontSize(8.5); doc.setTextColor(...TEAL);
+    doc.text("MODULE 2: CX360 BUILDING CLIENT RELATIONSHIPS  ·  ASSISTANT MANAGERS AND MANAGERS", M, 108);
+    y = 162;
+    kv("Name:", S.name.trim());
+    kv("Role:", S.role);
+    kv("Team / site:", S.team);
+    kv("Session date:", S.date);
+    kv("Completed:", new Date().toLocaleString());
+
+    // Classification card
+    y += 10; ensure(190);
+    const top = y, boxH = 176;
+    doc.setFillColor(...SOFT); doc.setDrawColor(...LINE); doc.roundedRect(M, top, CW, boxH, 6, 6, "FD");
+    doc.setFillColor(...TEAL); doc.rect(M, top + 8, 3, boxH - 16, "F");
+    const px = M + 20; y = top + 22;
+    doc.setFont("helvetica", "bold"); doc.setFontSize(8); doc.setTextColor(...TEAL_D); doc.text("SECTION 1 RESULT  ·  MY CLASSIFICATION", px, y); y += 22;
+    doc.setFontSize(18); doc.setTextColor(...TXT); doc.text(pdfSafe(STYLES[r.dom].name), px, y);
+    const nameW = doc.getTextWidth(STYLES[r.dom].name);
+    doc.setFont("helvetica", "italic"); doc.setFontSize(10.5); doc.setTextColor(...MUTED);
+    doc.text(pdfSafe(`“${STYLES[r.dom].motto}”`), px + nameW + 10, y);
+    y += 16;
+    doc.setFont("helvetica", "normal"); doc.setFontSize(10); doc.setTextColor(...BODY);
+    doc.text(pdfSafe(r.blended ? `Blended style with ${STYLES[r.second].name} (top two scores within one point)` : `Second style: ${STYLES[r.second].name}`), px, y);
+    y += 18;
+    const barX = px + 120, barW = CW - 20 - 120 - 60;
+    LETTERS.forEach(L => {
+      doc.setFont("helvetica", L === r.dom ? "bold" : "normal"); doc.setFontSize(10); doc.setTextColor(...TXT);
+      doc.text(`${L}  ${STYLES[L].name}`, px, y + 7);
+      doc.setFillColor(...LINE); doc.roundedRect(barX, y, barW, 8, 4, 4, "F");
+      const w = barW * r.pcts[L] / 100;
+      if (w > 0) { doc.setFillColor(...(L === r.dom ? TEAL_D : L === r.second && r.blended ? SKY : [190, 200, 215])); doc.roundedRect(barX, y, Math.max(w, 8), 8, 4, 4, "F"); }
+      doc.setFont("helvetica", "bold"); doc.setTextColor(...TXT); doc.text(`${r.pcts[L]}%`, barX + barW + 12, y + 7);
+      doc.setFont("helvetica", "normal"); doc.setTextColor(...MUTED); doc.text(`(${r.counts[L]})`, barX + barW + 38, y + 7);
+      y += 20;
+    });
+    y = top + boxH + 14;
+
+    (r.blended ? [r.dom, r.second] : [r.dom]).forEach(L => {
+      ensure(80);
+      text(STYLES[L].name, { bold: true, color: TXT, gap: 1, size: 11.5 });
+      text(`Strengths: ${STYLES[L].strengths.join(", ")}`, { indent: 12, gap: 1 });
+      text(`Watch out for: ${STYLES[L].watch}`, { indent: 12, gap: 1 });
+      text(`Matching client style: ${STYLES[L].client} (wants ${STYLES[L].wants.toLowerCase()} first)`, { indent: 12, gap: 1 });
+      text(`Stretch client: ${STYLES[L].stretch}`, { indent: 12, gap: 8 });
+    });
+
+    section("My style: answers", "Section 1");
+    QUESTIONS.forEach(([q, opts], i) => {
+      const a = S.q[i]; ensure(40);
+      text(`${i + 1}. ${q}`, { bold: true, color: TXT, gap: 2 });
+      text(a ? `${a}  —  ${opts[LETTERS.indexOf(a)]}` : "(not answered)", { indent: 12, gap: 8, italic: !a, color: a ? BODY : MUTED });
+    });
+
+    section(`Read the client: ${p2Score()} of 6 correct`, "Section 2");
+    CLIENTS.forEach((c, i) => {
+      const a = S.c[i], ok = a.style === c.style; ensure(120);
+      text(`${i + 1}. ${c.who}, ${c.role}`, { bold: true, color: TXT, gap: 1, size: 11.5 });
+      kv("My classification:", `${a.style || "(none)"}   [${ok ? "Correct" : "Incorrect"}]`, 12);
+      kv("Correct answer:", c.style, 12);
+      text("My opening line:", { bold: true, size: 9.5, color: MUTED, gap: 1, indent: 12 });
+      text(a.line.trim() || "(not answered)", { indent: 24, gap: 4, color: TXT, italic: !a.line.trim() });
+      text("Example opening line:", { bold: true, size: 9.5, color: MUTED, gap: 1, indent: 12 });
+      text(`“${c.model}”`, { indent: 24, gap: 4, italic: true });
+      text("Feedback:", { bold: true, size: 9.5, color: MUTED, gap: 1, indent: 12 });
+      text(c.coach, { indent: 24, gap: 10, size: 10 });
+    });
+
+    section("My flex plan", "Section 3");
+    [["My dominant style is:", S.p3.dominant],
+     ["My most challenging client relationship. Their style is:", S.p3.client],
+     ["Where our styles clash, I tend to:", S.p3.clash],
+     ["Three things I'll do differently in my next conversation with them:",
+       [S.p3.do1, S.p3.do2, S.p3.do3].map((t, i) => t.trim() ? `${i + 1}. ${t.trim()}` : "").filter(Boolean).join("\n")],
+     ["How I'll know it's working:", S.p3.working]
+    ].forEach(([q, a]) => { ensure(36); text(q, { bold: true, color: TXT, gap: 2 }); answer(a); });
+
+    ensure(70); y += 8;
+    doc.setFillColor(...NAVY); doc.roundedRect(M, y, CW, 52, 6, 6, "F");
+    doc.setFont("helvetica", "bold"); doc.setFontSize(10.5); doc.setTextColor(...TEAL);
+    doc.text("Submit this PDF", M + 14, y + 20);
+    doc.setFont("helvetica", "normal"); doc.setTextColor(255, 255, 255);
+    doc.text(pdfSafe(`Email it to ${EMAIL} with the subject "ADRV Scoring Sheet – ${S.name.trim()}".`), M + 14, y + 37);
+
+    const n = doc.getNumberOfPages();
+    for (let p = 1; p <= n; p++) {
+      doc.setPage(p);
+      doc.setDrawColor(...LINE); doc.line(M, H - 40, W - M, H - 40);
+      doc.setFont("helvetica", "normal"); doc.setFontSize(8.5); doc.setTextColor(...MUTED);
+      doc.text(pdfSafe(`ADRV Scoring Sheet  ·  ${S.name.trim()}`), M, H - 26);
+      doc.text(`Page ${p} of ${n}`, W - M, H - 26, { align: "right" });
+    }
+    return doc;
+  }
+
+  function downloadPdf() {
+    if (!window.jspdf) { toast("The PDF tool didn't load. Check your connection and refresh."); return; }
+    const safe = S.name.trim().replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "") || "Participant";
+    buildPdf().save(`ADRV-Scoring-Sheet_${safe}.pdf`);
+    S.downloaded = true; save(); render(false);
+    toast("PDF downloaded. Now email it to the Learning team.");
+  }
+
+  // ================= Start =================
+  if (!STEPS[S.step] || !canEnter(S.step)) S.step = 0;
+  render(true);
+})();
+</script>
+</body>
+</html>
